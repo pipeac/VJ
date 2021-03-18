@@ -1,0 +1,7 @@
+﻿  Scene.cpp
+SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\marc0\Documents\VJ\OpenGL\06-text\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\marc0\Documents\VJ\OpenGL\06-text\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'C:\Users\marc0\Documents\VJ\OpenGL\06-text\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'C:\Users\marc0\Documents\VJ\OpenGL\06-text\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+  06-text.vcxproj -> C:\Users\marc0\Documents\VJ\OpenGL\06-text\Debug\06-text.exe
+  06-text.vcxproj -> C:\Users\marc0\Documents\VJ\OpenGL\06-text\Debug\06-text.pdb (Full PDB)
