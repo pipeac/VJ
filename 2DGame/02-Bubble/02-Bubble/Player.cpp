@@ -13,25 +13,19 @@
 
 enum PlayerAnims
 {
-	JUMP_LEFT, JUMP_RIGHT, STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
+	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, VINE_LEFT, VINE_RIGHT, VINE_STAND_LEFT, VINE_STAND_RIGHT, JUMP_LEFT, JUMP_RIGHT,
 };
 
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
+	auxJump = true;
+	vine = false;
 	spritesheet.loadFromFile("images/mariosprites.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(6);
+	sprite = Sprite::createSprite(glm::ivec2(16, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(10);
 
-		sprite->setAnimationSpeed(JUMP_LEFT, 8);
-		sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.5f, 0.25f));
-
-		sprite->setAnimationSpeed(JUMP_RIGHT, 8);
-		sprite->addKeyframe(JUMP_RIGHT, glm::vec2(0.5f, 0.f));
-
-		sprite->setAnimationSpeed(STAND_LEFT, 8);
-		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
 	
 		sprite->setAnimationSpeed(STAND_LEFT, 8);
 		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
@@ -45,9 +39,29 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.75f));
 		
 		sprite->setAnimationSpeed(MOVE_RIGHT, 8);
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.25f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.5f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.75f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25f, 0.25f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25f, 0.5f));
+		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25f, 0.75f));
+
+		sprite->setAnimationSpeed(VINE_LEFT, 4);
+		sprite->addKeyframe(VINE_LEFT, glm::vec2(0.5f, 0.5f));
+		sprite->addKeyframe(VINE_LEFT, glm::vec2(0.5f, 0.75f));
+
+		sprite->setAnimationSpeed(VINE_RIGHT, 4);
+		sprite->addKeyframe(VINE_RIGHT, glm::vec2(0.75f, 0.5f));
+		sprite->addKeyframe(VINE_RIGHT, glm::vec2(0.75f, 0.75f));
+
+		sprite->setAnimationSpeed(VINE_STAND_LEFT, 4);
+		sprite->addKeyframe(VINE_STAND_LEFT, glm::vec2(0.5f, 0.5f));
+
+		sprite->setAnimationSpeed(VINE_STAND_RIGHT, 4);
+		sprite->addKeyframe(VINE_STAND_RIGHT, glm::vec2(0.75f, 0.5f));
+
+		sprite->setAnimationSpeed(JUMP_LEFT, 8);
+		sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.5f, 0.25f));
+
+		sprite->setAnimationSpeed(JUMP_RIGHT, 8);
+		sprite->addKeyframe(JUMP_RIGHT, glm::vec2(0.5f, 0.f));
 		
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -59,37 +73,82 @@ void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 
-	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))																			//Moure esquerra
 	{
-		if(sprite->animation() != MOVE_LEFT)
+		if (sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
+		if(map->collisionMoveLeft(posPlayer, glm::ivec2(16, 32)))
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
+
 		}
 	}
-	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))																		//Moure dreta
 	{
-		if(sprite->animation() != MOVE_RIGHT)
+		if (sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);
 		posPlayer.x += 2;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
+		if(map->collisionMoveRight(posPlayer, glm::ivec2(16, 32)))
 		{
 			posPlayer.x -= 2;
 			sprite->changeAnimation(STAND_RIGHT);
 		}
 	}
+	else																														//Quedar-se quiet
+	{
+		if(sprite->animation() == MOVE_LEFT) sprite->changeAnimation(STAND_LEFT);
+		else if(sprite->animation() == MOVE_RIGHT) sprite->changeAnimation(STAND_RIGHT);
+	}
+
+	if (map->VineMove(posPlayer, glm::ivec2(16, 32), &posPlayer.y))																//Pujar liana
+	{
+		vine = true;
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP)) 
+		{
+			if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT || sprite->animation() == VINE_STAND_LEFT || sprite->animation() == JUMP_LEFT)
+				sprite->changeAnimation(VINE_LEFT);
+			else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT || sprite->animation() == VINE_STAND_RIGHT || sprite->animation() == JUMP_RIGHT)
+				sprite->changeAnimation(VINE_RIGHT);
+			posPlayer.y -= 1;
+			auxJump = false;
+		}
+		else  if (!Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+		{
+			if (sprite->animation() == VINE_RIGHT || sprite->animation() == JUMP_RIGHT) sprite->changeAnimation(VINE_STAND_RIGHT);
+			else if (sprite->animation() == VINE_LEFT || sprite->animation() == JUMP_LEFT) sprite->changeAnimation(VINE_STAND_LEFT);
+		}
+	}
+
 	else
 	{
-		if(sprite->animation() == MOVE_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if(sprite->animation() == MOVE_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
+		if (!auxJump)
+		{
+			if (sprite->animation() == VINE_RIGHT) sprite->changeAnimation(STAND_RIGHT);
+			else if (sprite->animation() == VINE_LEFT) sprite->changeAnimation(STAND_LEFT);
+		}
+		if (!Game::instance().getSpecialKey(GLUT_KEY_UP))
+			auxJump = true;
+		vine = false;
+	}
+
+	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))																			//Baixar liana
+	{
+		posPlayer.y += 1;
+		if (map->VineMove(posPlayer, glm::ivec2(16, 32), &posPlayer.y)) {
+			if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT || sprite->animation() == VINE_STAND_LEFT || sprite->animation() == JUMP_LEFT)
+				sprite->changeAnimation(VINE_LEFT);
+			else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT || sprite->animation() == VINE_STAND_RIGHT || sprite->animation() == JUMP_RIGHT)
+				sprite->changeAnimation(VINE_RIGHT);
+		}
+		if (map->collisionMoveDownVine(posPlayer, glm::ivec2(16, 32), &posPlayer.y))
+		{
+			posPlayer.y -= 1;
+		}
 	}
 	
-	if(bJumping)
+	if(bJumping)																												//Saltar
 	{
 		jumpAngle += JUMP_ANGLE_STEP;
 		if(jumpAngle == 180)
@@ -104,21 +163,23 @@ void Player::update(int deltaTime)
 		{
 			if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT) sprite->changeAnimation(JUMP_LEFT);
 			else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) sprite->changeAnimation(JUMP_RIGHT);
+			else sprite->changeAnimation(JUMP_RIGHT);
 
 			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
 			if(jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y);
+				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(16, 32), &posPlayer.y);
 		}
 	}
-	else
+	
+	else if (!vine)																												//Caure
 	{
 		posPlayer.y += FALL_STEP;
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
+		if(map->collisionMoveDown(posPlayer, glm::ivec2(16, 32), &posPlayer.y))
 		{
 			if (sprite->animation() == JUMP_LEFT) sprite->changeAnimation(STAND_LEFT);
 			else if (sprite->animation() == JUMP_RIGHT) sprite->changeAnimation(STAND_RIGHT);
 
-			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
+			if(Game::instance().getSpecialKey(GLUT_KEY_UP) && auxJump)
 			{
 				bJumping = true;
 				jumpAngle = 0;
