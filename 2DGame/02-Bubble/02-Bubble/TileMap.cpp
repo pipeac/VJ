@@ -186,12 +186,12 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 {
 	int x0, x1, y;
 	
-	x0 = pos.x / tileSize;
-	x1 = (pos.x + size.x - 1) / tileSize;
+	x0 = (pos.x + 4) / tileSize;
+	x1 = (pos.x + size.x - 5) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
 	for(int x=x0; x<=x1; x++)
 	{
-		if(map[y*mapSize.x+x] != 0)
+		if(map[y*mapSize.x+x] != 0 && map[y*mapSize.x + x] != 6 && map[y*mapSize.x + x] != 9)
 		{
 			if(*posY - tileSize * y + size.y <= 4)
 			{
@@ -204,12 +204,24 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
+bool TileMap::collisionWater(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
+{
+	int x, y;
+
+	x = (pos.x + size.x / 2) / tileSize;
+	y = (pos.y + size.y - 1) / tileSize;
+	if (map[y*mapSize.x + x] == 6)
+		return true;
+
+	return false;
+}
+
 bool TileMap::collisionMoveDownVine(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
 {
 	int x0, x1, y;
 
-	x0 = pos.x / tileSize;
-	x1 = (pos.x + size.x - 1) / tileSize;
+	x0 = (pos.x + 4) / tileSize;
+	x1 = (pos.x + size.x - 5) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
@@ -230,8 +242,8 @@ bool TileMap::VineMove(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY)
 {
 	int x0, x1, y;
 
-	x0 = pos.x / tileSize;
-	x1 = (pos.x + size.x - 1) / tileSize;
+	x0 = (pos.x + 4) / tileSize;
+	x1 = (pos.x + size.x - 5) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
@@ -240,6 +252,40 @@ bool TileMap::VineMove(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY)
 			return true;
 		}
 	}
+
+	return false;
+}
+
+bool TileMap::pain(const glm::ivec2 &posPlayer, const glm::ivec2 &sizePlayer, const glm::ivec2 &posEnemy, const glm::ivec2 &sizeEnemy) const
+{
+	int xp0, xp1, yp0, yp1, xe0, xe1, ye0, ye1;
+
+	xp0 = posPlayer.x;
+	xp1 = posPlayer.x + sizePlayer.x - 1;
+	yp0 = posPlayer.y;
+	yp1 = posPlayer.y + sizePlayer.y - 1;
+	xe0 = posEnemy.x;
+	xe1 = posEnemy.x + sizeEnemy.x - 1;
+	ye0 = posEnemy.y;
+	ye1 = posEnemy.y + sizeEnemy.y - 1;
+
+	if (xp0 >= xe0 && xp0 <= xe1 && yp0 >= ye0 && yp0 <= ye1)										//baix esquerra
+		return true;
+	else if (xp1 >= xe0 && xp1 <= xe1 && yp0 >= ye0 && yp0 <= ye1)									//baix dret
+		return true;
+	else if (xp0 >= xe0 && xp0 <= xe1 && yp1 >= ye0 && yp1 <= ye1)									//dalt esquera
+		return true;
+	else if (xp1 >= xe0 && xp1 <= xe1 && yp1 >= ye0 && yp1 <= ye1)									//dalt dret
+		return true;
+
+	return false;
+}
+
+bool TileMap::death(int posYant, int posY, int posYenemy, const glm::ivec2 &sizeEnemy) const
+{
+
+	if (posYant <= posYenemy && posY >= posYenemy)
+		return true;
 
 	return false;
 }

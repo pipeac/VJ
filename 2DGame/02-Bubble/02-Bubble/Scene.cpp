@@ -5,16 +5,20 @@
 #include "Game.h"
 
 
-#define SCREEN_X 32
-#define SCREEN_Y 16
+#define SCREEN_X 0
+#define SCREEN_Y 0
 
 #define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_Y_TILES 27
+
+#define INIT_ENEMY_X_TILES 10
+#define INIT_ENEMY_Y_TILES 28
 
 
 Scene::Scene()
 {
 	map = NULL;
+	enemymap = NULL;
 	player = NULL;
 }
 
@@ -22,6 +26,8 @@ Scene::~Scene()
 {
 	if(map != NULL)
 		delete map;
+	if (enemymap != NULL)
+		delete enemymap;
 	if(player != NULL)
 		delete player;
 }
@@ -30,19 +36,74 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/mapaprova.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	chocar = false;
+	death = false;
+	auxrender = true;
+	gumba = glm::ivec2(16, 16);
+	map = TileMap::createTileMap("levels/MapaProva.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	enemymap = EnemyPath::createEnemyPath("levels/EnemyPath.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
+
+	enemy = new Enemy();
+	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * enemymap->getTileSize(), INIT_ENEMY_Y_TILES * enemymap->getTileSize()));
+	enemy->setEnemyMap(enemymap);
+
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+	auxTime = 0;
+	aux = 0;
 }
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
+	int posant = player->getPosPlayer().y;
 	player->update(deltaTime);
+	enemy->update(deltaTime);
+
+	glm::ivec2 posp = player->getPosPlayer();
+	int height = player->getCrouchPlayer();
+	glm::ivec2 pose = enemy->getPosEnemy();
+
+	if (!chocar && map->pain(posp, glm::ivec2(16, 32), pose, gumba))
+	{
+		if (map->death(posant + 31, posp.y + 31, pose.y, gumba))
+		{
+			enemy->death();
+			gumba.y = 0;
+		}
+		else if (!death)
+		{
+			death = player->death();
+			if (!death)
+			{
+				chocar = true;
+				auxchocar = 0.0f;
+				aux = 0;
+			}
+		}
+	}
+
+	if (chocar)
+	{
+		if (auxchocar >= 60.0f) 
+		{
+			auxrender = !auxrender;
+			if (aux == 20) 
+			{
+				chocar = false;
+				auxrender = true;
+			}
+			aux++;
+			auxchocar = 0.0f;
+		}
+		auxchocar += deltaTime;
+	}
 }
 
 void Scene::render()
@@ -56,7 +117,14 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	player->render();
+	if (auxrender)
+		player->render();
+	if (auxTime != 30)
+	{
+		enemy->render();
+		if (gumba.y == 0)
+			auxTime++;
+	}
 }
 
 void Scene::initShaders()

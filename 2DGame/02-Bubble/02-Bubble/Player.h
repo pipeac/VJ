@@ -17,14 +17,19 @@ public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
+
+	bool death();
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+
+	glm::ivec2 getPosPlayer() const { return posPlayer; }
+	int getCrouchPlayer() const { return crouch; }
 	
 private:
 	bool bJumping, vine, auxJump;
-	glm::ivec2 tileMapDispl, posPlayer, auxPosPlayer;;
-	int jumpAngle, startY;
+	glm::ivec2 tileMapDispl, posPlayer, auxPosPlayer;
+	int jumpAngle, startY, life, crouch;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
