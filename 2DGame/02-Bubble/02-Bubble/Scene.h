@@ -8,6 +8,8 @@
 #include "EnemyPath.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Tortuga.h"
+
 
 
 // Scene contains all the entities of our game.
@@ -35,6 +37,7 @@ private:
 	EnemyPath *enemymap;
 	Player *player;
 	Enemy *enemy;
+	Tortuga *tortuga;
 	ShaderProgram texProgram;
 	float currentTime, auxchocar;
 	glm::mat4 projection;

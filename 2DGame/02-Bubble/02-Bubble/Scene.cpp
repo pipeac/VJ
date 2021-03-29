@@ -5,6 +5,7 @@
 #include "Game.h"
 
 
+
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
@@ -13,6 +14,9 @@
 
 #define INIT_ENEMY_X_TILES 10
 #define INIT_ENEMY_Y_TILES 28
+
+#define INIT_TORTUGA_X_TILES 9
+#define INIT_TORTUGA_Y_TILES 27
 
 
 Scene::Scene()
@@ -30,6 +34,7 @@ Scene::~Scene()
 		delete enemymap;
 	if(player != NULL)
 		delete player;
+
 }
 
 
@@ -53,6 +58,11 @@ void Scene::init()
 	enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * enemymap->getTileSize(), INIT_ENEMY_Y_TILES * enemymap->getTileSize()));
 	enemy->setEnemyMap(enemymap);
 
+	tortuga = new Tortuga();
+	tortuga->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	tortuga->setPosition(glm::vec2(INIT_TORTUGA_X_TILES * enemymap->getTileSize(), INIT_TORTUGA_Y_TILES * enemymap->getTileSize()));
+	tortuga->setEnemyMap(enemymap);
+
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 	auxTime = 0;
@@ -65,10 +75,12 @@ void Scene::update(int deltaTime)
 	int posant = player->getPosPlayer().y;
 	player->update(deltaTime);
 	enemy->update(deltaTime);
+	tortuga->update(deltaTime);
 
 	glm::ivec2 posp = player->getPosPlayer();
 	int height = player->getCrouchPlayer();
 	glm::ivec2 pose = enemy->getPosEnemy();
+	glm::ivec2 postortuga = tortuga->getPosEnemy();
 
 	if (!chocar && map->pain(posp, glm::ivec2(16, 32), pose, gumba))
 	{
@@ -122,6 +134,7 @@ void Scene::render()
 	if (auxTime != 30)
 	{
 		enemy->render();
+		tortuga->render();
 		if (gumba.y == 0)
 			auxTime++;
 	}
