@@ -23,7 +23,7 @@ public:
 	Scene();
 	~Scene();
 
-	void init();
+	void init(bool enemy1_in, bool enemy2_in);
 	void update(int deltaTime);
 	void render();
 
@@ -41,7 +41,9 @@ private:
 	ShaderProgram texProgram;
 	float currentTime, auxchocar;
 	glm::mat4 projection;
-	glm::ivec2 gumba;
+	glm::ivec2 gumba_size;
+	glm::ivec2 tortuga_size;
+
 
 };
 
