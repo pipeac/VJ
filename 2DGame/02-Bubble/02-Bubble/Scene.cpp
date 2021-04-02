@@ -169,10 +169,10 @@ void Scene::render()
 	if (auxTime != 30)
 	{
 		if (enemy != NULL) enemy->render();
-		if (tortuga != NULL) tortuga->render();
 		if (enemy != NULL && gumba_size.y == 0)
 			auxTime++;
 	}
+	if (tortuga != NULL) tortuga->render();
 }
 
 void Scene::initShaders()
