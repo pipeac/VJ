@@ -50,8 +50,21 @@ void Tortuga::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Tortuga::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (crouched)
+	if (crouched) {
 		sprite->changeAnimation(CROUCHED_STAND);
+		if (chutada) {
+			sprite->changeAnimation(CROUCHED_STAND);
+			if (left) {
+				posEnemy.x -= 3;
+			}
+			if (!left) { //if (right)
+				posEnemy.x += 3;
+
+			}
+		}
+	}
+		
+
 	else //la tortuga esta dempeus
 	{
 		if (left) 
@@ -66,11 +79,15 @@ void Tortuga::update(int deltaTime)
 			if (sprite->animation() != MOVE_RIGHT)
 				sprite->changeAnimation(MOVE_RIGHT);
 		}
-		if (enemypath->collisionMoveLeft(posEnemy, glm::ivec2(16, 32)))
-			left = false; //acivem el modo RIGHT
-		else if (enemypath->collisionMoveRight(posEnemy, glm::ivec2(16, 32)))
-			left = true; //activem el modo LEFT
+		//if (enemypath->collisionMoveLeft(posEnemy, glm::ivec2(16, 32)))
+		//	left = false; //acivem el modo RIGHT
+		//else if (enemypath->collisionMoveRight(posEnemy, glm::ivec2(16, 32)))
+		//	left = true; //activem el modo LEFT
 	}
+	if (enemypath->collisionMoveLeft(posEnemy, glm::ivec2(16, 16)))
+		left = false; //acivem el modo RIGHT
+	else if (enemypath->collisionMoveRight(posEnemy, glm::ivec2(16, 16)))
+		left = true; //activem el modo LEFT
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }

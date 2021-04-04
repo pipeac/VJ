@@ -123,7 +123,7 @@ void Scene::update(int deltaTime)
 			if (tortuga != NULL)
 			{
 				tortuga->death();
-				tortuga_size.y = 0;
+				tortuga_size.y = 16;
 			}
 		}
 		else if (!death)
@@ -137,6 +137,16 @@ void Scene::update(int deltaTime)
 			}
 		}
 	}
+
+	if (chocar && map->pain(posp, glm::ivec2(16, 32), postortuga, tortuga_size)) {
+		if (tortuga != NULL) {
+			if (tortuga->getCrouched()) {
+				tortuga->setChutada(true);
+			}
+		}
+	}
+
+	
 
 
 	if (chocar)

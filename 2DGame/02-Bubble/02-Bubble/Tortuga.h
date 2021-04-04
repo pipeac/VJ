@@ -19,13 +19,22 @@ public:
 	void render();
 	void death();
 
+	//setters
 	void setEnemyMap(EnemyPath *enemymap);
 	void setPosition(const glm::vec2 &pos);
+	void setChutada(bool b) {
+		chutada = b;
+	}
+
+	//getters
+	bool getCrouched() {
+		return crouched;
+	}
 
 	glm::ivec2 getPosEnemy() const { return posEnemy; }
 
 private:
-	bool crouched, left;
+	bool crouched, chutada, left;
 	glm::ivec2 tileMapDispl, posEnemy;
 	int startY;
 	Texture spritesheet;
