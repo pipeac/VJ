@@ -24,11 +24,11 @@ void Tortuga::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->setNumberAnimations(4);
 
 
-	sprite->setAnimationSpeed(MOVE_LEFT, 2);
+	sprite->setAnimationSpeed(MOVE_LEFT, 4);
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.0f, 0.25f));
 
-	sprite->setAnimationSpeed(MOVE_RIGHT, 2);
+	sprite->setAnimationSpeed(MOVE_RIGHT, 4);
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5f, 0.f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5f, 0.25f));
 
@@ -57,12 +57,14 @@ void Tortuga::update(int deltaTime)
 		if (left) 
 		{
 			posEnemy.x -= 2;
-			sprite->changeAnimation(MOVE_LEFT);
+			if (sprite->animation() != MOVE_LEFT)
+				sprite->changeAnimation(MOVE_LEFT);
 		}
 		else //està en modo RIGHT
 		{
 			posEnemy.x += 2;
-			sprite->changeAnimation(MOVE_RIGHT);
+			if (sprite->animation() != MOVE_RIGHT)
+				sprite->changeAnimation(MOVE_RIGHT);
 		}
 		if (enemypath->collisionMoveLeft(posEnemy, glm::ivec2(16, 32)))
 			left = false; //acivem el modo RIGHT
