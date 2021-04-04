@@ -47,7 +47,7 @@ void Scene::init(string loadmap, string loadenemypath, bool enemy1_in, bool enem
 	death = false;
 	auxrender = true;
 	gumba_size = glm::ivec2(16, 16);
-	tortuga_size = glm::ivec2(16, 32);
+	tortuga_size = glm::ivec2(16, 24);
 	map = TileMap::createTileMap(loadmap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	enemymap = EnemyPath::createEnemyPath(loadenemypath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
