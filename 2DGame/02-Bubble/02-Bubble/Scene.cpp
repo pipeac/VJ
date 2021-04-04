@@ -10,20 +10,19 @@
 #define SCREEN_Y 0
 
 #define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 27
+#define INIT_PLAYER_Y_TILES 34
 
 #define INIT_ENEMY_X_TILES 10
-#define INIT_ENEMY_Y_TILES 28
+#define INIT_ENEMY_Y_TILES 35
 
 #define INIT_TORTUGA_X_TILES 9
-#define INIT_TORTUGA_Y_TILES 27
+#define INIT_TORTUGA_Y_TILES 34
 
 
 Scene::Scene()
 {
 	map = NULL;
 	enemymap = NULL;
-	player = NULL;
 	enemy = NULL;
 	tortuga = NULL;
 }
@@ -34,13 +33,14 @@ Scene::~Scene()
 		delete map;
 	if (enemymap != NULL)
 		delete enemymap;
-	if(player != NULL)
-		delete player;
-
+	if (enemy != NULL)
+		delete enemy;
+	if (tortuga != NULL)
+		delete tortuga;
 }
 
 
-void Scene::init(bool enemy1_in, bool enemy2_in)
+void Scene::init(string loadmap, string loadenemypath, bool enemy1_in, bool enemy2_in)
 {
 	initShaders();
 	chocar = false;
@@ -48,13 +48,10 @@ void Scene::init(bool enemy1_in, bool enemy2_in)
 	auxrender = true;
 	gumba_size = glm::ivec2(16, 16);
 	tortuga_size = glm::ivec2(16, 32);
-	map = TileMap::createTileMap("levels/MapaProva.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	enemymap = EnemyPath::createEnemyPath("levels/EnemyPath.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap(loadmap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	enemymap = EnemyPath::createEnemyPath(loadenemypath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTileMap(map);
+	Player::instance().init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	if (enemy2_in)
 	{
@@ -84,16 +81,16 @@ void Scene::init(bool enemy1_in, bool enemy2_in)
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	int posant = player->getPosPlayer().y;
-	player->update(deltaTime);
+	int posant = Player::instance().getPosPlayer().y;
+	Player::instance().update(deltaTime);
 	if (enemy != NULL) enemy->update(deltaTime);
 	if (tortuga != NULL) tortuga->update(deltaTime);
 
-	glm::ivec2 posp = player->getPosPlayer();
-	int height = player->getCrouchPlayer();
+	glm::ivec2 posp = Player::instance().getPosPlayer();
+	int height = Player::instance().getCrouchPlayer();
 	glm::ivec2 pose(0);
 	if (enemy != NULL)	pose = enemy->getPosEnemy();
-	glm::ivec2 postortuga = tortuga->getPosEnemy();
+	glm::ivec2 postortuga;
 	if (tortuga != NULL) postortuga = tortuga->getPosEnemy();
 
 	if (!chocar && map->pain(posp, glm::ivec2(16, 32), pose, gumba_size))
@@ -105,7 +102,7 @@ void Scene::update(int deltaTime)
 		}
 		else if (!death)
 		{
-			death = player->death();
+			death = Player::instance().death();
 			if (!death)
 			{
 				chocar = true;
@@ -125,7 +122,7 @@ void Scene::update(int deltaTime)
 		}
 		else if (!death)
 		{
-			death = player->death();
+			death = Player::instance().death();
 			if (!death)
 			{
 				chocar = true;
@@ -165,7 +162,7 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	if (auxrender)
-		player->render();
+		Player::instance().render();
 	if (auxTime != 30)
 	{
 		if (enemy != NULL) enemy->render();
@@ -173,6 +170,28 @@ void Scene::render()
 			auxTime++;
 	}
 	if (tortuga != NULL) tortuga->render();
+}
+
+void Scene::initPlayerScene(int posplayerX, int posplayerY)
+{
+	Player::instance().setPosition(glm::vec2(posplayerX, posplayerY));
+	Player::instance().setTileMap(map);
+}
+
+glm::vec2 Scene::getPosPlayer()
+{
+	return Player::instance().getPosPlayer();
+}
+
+int Scene::playerPosActual()
+{
+	glm::ivec2 posPlayer = getPosPlayer();
+	if (posPlayer.x >= 624)
+		return 1;
+	else if (posPlayer.x <= 0)
+		return -1;
+	else
+		return 0;
 }
 
 void Scene::initShaders()
@@ -204,6 +223,3 @@ void Scene::initShaders()
 	vShader.free();
 	fShader.free();
 }
-
-
-

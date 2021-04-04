@@ -23,19 +23,23 @@ public:
 	Scene();
 	~Scene();
 
-	void init(bool enemy1_in, bool enemy2_in);
+	void init(string loadmap, string loadenemypath, bool enemy1_in, bool enemy2_in);
 	void update(int deltaTime);
 	void render();
+	void initPlayerScene(int posplayerX, int posplayerY);
+
+	glm::vec2 getPosPlayer();
+
+	int playerPosActual();
 
 private:
 	void initShaders();
 
 private:
 	int aux, auxTime;
-	bool chocar, auxrender, death;
+	bool chocar, auxrender, death, canviescena;
 	TileMap *map;
 	EnemyPath *enemymap;
-	Player *player;
 	Enemy *enemy;
 	Tortuga *tortuga;
 	ShaderProgram texProgram;
