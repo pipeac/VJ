@@ -97,8 +97,11 @@ void Scene::update(int deltaTime)
 	{
 		if (map->death(posant + 31, posp.y + 31, pose.y, gumba_size))
 		{
-			if (enemy != NULL) enemy->death();
-			if (enemy != NULL) gumba_size.y = 0;
+			if (enemy != NULL)
+			{
+				enemy->death();
+				gumba_size.y = 0;
+			}
 		}
 		else if (!death)
 		{
@@ -117,8 +120,11 @@ void Scene::update(int deltaTime)
 	{
 		if (map->death(posant + 31, posp.y + 31, postortuga.y, tortuga_size))
 		{
-			if (enemy != NULL) tortuga->death();
-			if (enemy != NULL) tortuga_size.y = 0;
+			if (enemy != NULL)
+			{
+				tortuga->death();
+				tortuga_size.y = 0;
+			}
 		}
 		else if (!death)
 		{
