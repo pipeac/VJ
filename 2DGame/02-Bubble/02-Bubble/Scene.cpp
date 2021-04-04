@@ -120,7 +120,7 @@ void Scene::update(int deltaTime)
 	{
 		if (map->death(posant + 31, posp.y + 31, postortuga.y, tortuga_size))
 		{
-			if (enemy != NULL)
+			if (tortuga != NULL)
 			{
 				tortuga->death();
 				tortuga_size.y = 0;
