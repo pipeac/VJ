@@ -93,6 +93,8 @@ void Scene::update(int deltaTime)
 	glm::ivec2 postortuga;
 	if (tortuga != NULL) postortuga = tortuga->getPosEnemy();
 
+
+	//colision con el gumba
 	if (!chocar && map->pain(posp, glm::ivec2(16, 32), pose, gumba_size))
 	{
 		if (map->death(posant + 31, posp.y + 31, pose.y, gumba_size))
@@ -115,7 +117,7 @@ void Scene::update(int deltaTime)
 		}
 	}
 
-	
+	//colision con la tortuga
 	if (!chocar && map->pain(posp, glm::ivec2(16, 32), postortuga, tortuga_size))
 	{
 		if (map->death(posant + 31, posp.y + 31, postortuga.y, tortuga_size))
@@ -123,7 +125,9 @@ void Scene::update(int deltaTime)
 			if (tortuga != NULL)
 			{
 				tortuga->death();
+				Player::instance().set_Jumping(true);
 				tortuga_size.y = 16;
+				
 			}
 		}
 		else if (!death)

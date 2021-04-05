@@ -192,7 +192,7 @@ void Player::update(int deltaTime)
 				sprite->changeAnimation(STAND_RIGHT);
 		}
 	
-		if(bJumping)																												//Saltar
+		if (bJumping)																												//Saltar
 		{
 			jumpAngle += JUMP_ANGLE_STEP;
 			if(jumpAngle == 180)

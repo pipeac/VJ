@@ -29,6 +29,12 @@ public:
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	void set_Jumping(bool b) {
+		bJumping = b;
+		jumpAngle = 0;
+		startY = posPlayer.y;
+	}
+	
 
 	glm::ivec2 getPosPlayer() const { return posPlayer; }
 	int getCrouchPlayer() const { return crouch; }
