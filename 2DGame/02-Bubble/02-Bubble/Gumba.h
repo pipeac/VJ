@@ -10,7 +10,7 @@
 // all properties it needs to track its movement, jumping, and collisions.
 
 
-class Enemy
+class Gumba
 {
 
 public:
@@ -19,14 +19,20 @@ public:
 	void render();
 	void death();
 
+	//setters
 	void setEnemyMap(EnemyPath *enemymap);
 	void setPosition(const glm::vec2 &pos);
+	void setSize(glm::ivec2 vec_size) {size = vec_size;}
 
-	glm::ivec2 getPosEnemy() const { return posEnemy; }
+	//getters
+	glm::ivec2 getPos() const { return position; }
+	glm::ivec2 getSize() const { return size; }
 
+	
 private:
 	bool die, left;
-	glm::ivec2 tileMapDispl, posEnemy;
+	glm::ivec2 tileMapDispl, position;
+	glm::ivec2 size;
 	int startY;
 	Texture spritesheet;
 	Sprite *sprite;

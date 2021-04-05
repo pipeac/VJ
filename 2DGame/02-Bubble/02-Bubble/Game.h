@@ -47,8 +47,7 @@ private:
 	bool bPlay;                       // Continue to play game?
 	Scene scene[3];                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that we can have access at any time
-	bool Tortuga_in = true;
-	bool Gumba_in = false;
+
 	int sceneActual;
 };
 

@@ -7,9 +7,11 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	scene[0].init("levels/mapa1.txt", "levels/pathmapa1.txt", 1, 0);
+
+	//Gumba_in & Tortuga_in son presents en la Scena
+	scene[0].init("levels/mapa1.txt", "levels/pathmapa1.txt", true, true);
 	scene[0].initPlayerScene(64, 544);
-	scene[1].init("levels/mapa2.txt", "levels/pathmapa2.txt", 0, 1);
+	scene[1].init("levels/mapa2.txt", "levels/pathmapa2.txt", true, true);
 }
 
 bool Game::update(int deltaTime)
