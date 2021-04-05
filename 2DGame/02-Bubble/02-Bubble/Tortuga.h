@@ -31,11 +31,11 @@ public:
 		return crouched;
 	}
 
-	glm::ivec2 getPosEnemy() const { return posEnemy; }
+	glm::ivec2 getPos() const { return position; }
 
 private:
 	bool crouched, chutada, left;
-	glm::ivec2 tileMapDispl, posEnemy;
+	glm::ivec2 tileMapDispl, position;
 	int startY;
 	Texture spritesheet;
 	Sprite *sprite;

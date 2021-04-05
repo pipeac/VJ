@@ -99,22 +99,30 @@ void Scene::update(int deltaTime)
 
 	int MarioAntPos_Y = Player::instance().getPosPlayer().y;
 	
-	if (Gumba_in)  gumba->update(deltaTime); 
-	if (Tortuga_in) tortuga->update(deltaTime);
-	Player::instance().update(deltaTime);
+	//actualizacion del Gumba
+	glm::ivec2 posGumba;
+	if (Gumba_in) {
+		gumba->update(deltaTime);
+		posGumba = gumba->getPos();
+	}
 
-	glm::ivec2 posp = Player::instance().getPosPlayer();
+	//actualizacion de la Tortuga
+	glm::ivec2 posTortuga;
+	if (Tortuga_in) {
+		tortuga->update(deltaTime);
+		posTortuga = tortuga->getPos();
+	}
+
+	Player::instance().update(deltaTime);
+	glm::ivec2 posPlayer = Player::instance().getPosPlayer();
+
 	int height = Player::instance().getCrouchPlayer();
-	glm::ivec2 pose(0);
-	if (Gumba_in)	pose = gumba->getPos();
-	glm::ivec2 postortuga;
-	if (tortuga != NULL) postortuga = tortuga->getPosEnemy();
 
 
 	//colision con el gumba
-	if (!Mario_chocado && map->pain(posp, glm::ivec2(16, 32), pose, gumba_size))
+	if (!Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), posGumba, gumba_size))
 	{
-		if (map->death(MarioAntPos_Y + 31, posp.y + 31, pose.y, gumba_size))
+		if (map->death(MarioAntPos_Y + 31, posPlayer.y + 31, posGumba.y, gumba_size))
 		{
 			if (Gumba_in)
 			{
@@ -135,9 +143,9 @@ void Scene::update(int deltaTime)
 	}
 
 	//colision con la tortuga
-	if (!Mario_chocado && map->pain(posp, glm::ivec2(16, 32), postortuga, tortuga_size))
+	if (!Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), postortuga, tortuga_size))
 	{
-		if (map->death(MarioAntPos_Y + 31, posp.y + 31, postortuga.y, tortuga_size))
+		if (map->death(MarioAntPos_Y + 31, posPlayer.y + 31, postortuga.y, tortuga_size))
 		{
 			if (tortuga != NULL)
 			{
@@ -159,7 +167,7 @@ void Scene::update(int deltaTime)
 		}
 	}
 
-	if (Mario_chocado && map->pain(posp, glm::ivec2(16, 32), postortuga, tortuga_size)) {
+	if (Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), postortuga, tortuga_size)) {
 		if (tortuga != NULL) {
 			if (tortuga->getCrouched()) {
 				tortuga->setChutada(true);
