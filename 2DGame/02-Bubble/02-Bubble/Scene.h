@@ -9,7 +9,7 @@
 #include "Player.h"
 #include "Gumba.h"
 #include "Tortuga.h"
-
+#include "Text.h"
 
 
 // Scene contains all the entities of our game.
@@ -51,6 +51,7 @@ private:
 	Gumba *gumba;
 	Tortuga *tortuga;
 	ShaderProgram texProgram;
+	Text text;
 	float currentTime, auxchocar;
 	glm::mat4 projection;
 	glm::ivec2 gumba_size;

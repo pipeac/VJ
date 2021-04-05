@@ -81,6 +81,8 @@ void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTor
 		tortuga->setEnemyMap(enemymap);
 	}
 
+	if (!text.init("fonts/OpenSans-Regular.ttf"))
+		cout << "Could not load font!!!" << endl;
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -210,6 +212,8 @@ void Scene::render()
 			}
 		}
 	}
+
+	text.render("Videogames!!!", glm::vec2(10, 480 - 20), 32, glm::vec4(1, 1, 1, 1));
 }
 
 void Scene::initPlayerScene(int posplayerX, int posplayerY)
