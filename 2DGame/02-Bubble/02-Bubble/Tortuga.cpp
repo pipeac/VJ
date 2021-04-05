@@ -38,12 +38,10 @@ void Tortuga::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->setAnimationSpeed(CROUCHED_MOVE, 0);
 	sprite->addKeyframe(CROUCHED_STAND, glm::vec2(0.5f, 0.5f));
 
-	
-
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 
 }
 
@@ -55,10 +53,10 @@ void Tortuga::update(int deltaTime)
 		if (chutada) {
 			sprite->changeAnimation(CROUCHED_STAND);
 			if (left) {
-				posEnemy.x -= 3;
+				position.x -= 3;
 			}
 			if (!left) { //if (right)
-				posEnemy.x += 3;
+				position.x += 3;
 
 			}
 		}
@@ -69,13 +67,13 @@ void Tortuga::update(int deltaTime)
 	{
 		if (left) 
 		{
-			posEnemy.x -= 2;
+			position.x -= 2;
 			if (sprite->animation() != MOVE_LEFT)
 				sprite->changeAnimation(MOVE_LEFT);
 		}
 		else //està en modo RIGHT
 		{
-			posEnemy.x += 2;
+			position.x += 2;
 			if (sprite->animation() != MOVE_RIGHT)
 				sprite->changeAnimation(MOVE_RIGHT);
 		}
@@ -84,12 +82,12 @@ void Tortuga::update(int deltaTime)
 		//else if (enemypath->collisionMoveRight(posEnemy, glm::ivec2(16, 32)))
 		//	left = true; //activem el modo LEFT
 	}
-	if (enemypath->collisionMoveLeft(posEnemy, glm::ivec2(16, 16)))
+	if (enemypath->collisionMoveLeft(position, glm::ivec2(16, 16)))
 		left = false; //acivem el modo RIGHT
-	else if (enemypath->collisionMoveRight(posEnemy, glm::ivec2(16, 16)))
+	else if (enemypath->collisionMoveRight(position, glm::ivec2(16, 16)))
 		left = true; //activem el modo LEFT
 
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 }
 
 
@@ -110,6 +108,6 @@ void Tortuga::death()
 
 void Tortuga::setPosition(const glm::vec2 &pos)
 {
-	posEnemy = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+	position = pos;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 }

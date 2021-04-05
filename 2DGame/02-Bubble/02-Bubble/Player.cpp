@@ -22,7 +22,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bJumping = false;
 	auxJump = true;
 	vine = false;
-	crouch = 0;
+	size_crouched = 0;
 	life = 10;
 	exp = 0;
 	spritesheet.loadFromFile("images/SpritesMario.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -181,14 +181,14 @@ void Player::update(int deltaTime)
 			{
 				if (sprite->animation() != CROUCH)
 					sprite->changeAnimation(CROUCH);
-				crouch = 16;
+				size_crouched = 16;
 				posPlayer.y -= 1;
 			}
 		}
 
 		else
 		{
-			crouch = 0;
+			size_crouched = 0;
 			if (sprite->animation() == CROUCH)
 				sprite->changeAnimation(STAND_RIGHT);
 		}
