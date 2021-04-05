@@ -10,6 +10,7 @@
 #include "Gumba.h"
 #include "Tortuga.h"
 #include "Text.h"
+#include "Bolet.h"
 
 
 // Scene contains all the entities of our game.
@@ -52,6 +53,7 @@ private:
 	Tortuga *tortuga;
 	ShaderProgram texProgram;
 	Text text;
+	Bolet bolet[10];
 	float currentTime, auxchocar;
 	glm::mat4 projection;
 	glm::ivec2 gumba_size;

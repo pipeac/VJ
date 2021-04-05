@@ -38,11 +38,13 @@ public:
 
 	glm::ivec2 getPosPlayer() const { return posPlayer; }
 	int getCrouchPlayer() const { return crouch; }
+	int getLifePlayer() const { return life; }
+	int getExpPlayer() const { return exp;  }
 	
 private:
 	bool bJumping, vine, auxJump;
 	glm::ivec2 tileMapDispl, posPlayer, auxPosPlayer;
-	int jumpAngle, startY, life, crouch;
+	int jumpAngle, startY, life, crouch, exp;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;

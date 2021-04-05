@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
@@ -62,6 +63,9 @@ void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTor
 	enemymap = EnemyPath::createEnemyPath(loadenemypath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	Player::instance().init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+
+	for (int i = 0; i < Player::instance().getLifePlayer(); i++)
+		bolet[i].init(texProgram, glm::ivec2((150 + 20 * i), 576));
 
 	if (Gumba_in)
 	{
@@ -213,7 +217,11 @@ void Scene::render()
 		}
 	}
 
-	text.render("Videogames!!!", glm::vec2(10, 480 - 20), 32, glm::vec4(1, 1, 1, 1));
+	for (int i = 0; i < Player::instance().getLifePlayer(); i++)
+		bolet[i].render();
+
+	text.render("Vides: " + to_string(Player::instance().getLifePlayer()), glm::vec2(10, 600), 16, glm::vec4(1, 1, 1, 1));
+	text.render("Experiencia: " + to_string(Player::instance().getExpPlayer()), glm::vec2(10, 620), 16, glm::vec4(1, 1, 1, 1));
 }
 
 void Scene::initPlayerScene(int posplayerX, int posplayerY)
