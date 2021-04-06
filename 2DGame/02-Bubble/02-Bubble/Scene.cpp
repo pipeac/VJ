@@ -143,9 +143,9 @@ void Scene::update(int deltaTime)
 	}
 
 	//colision con la tortuga
-	if (!Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), postortuga, tortuga_size))
+	if (!Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), posTortuga, tortuga_size))
 	{
-		if (map->death(MarioAntPos_Y + 31, posPlayer.y + 31, postortuga.y, tortuga_size))
+		if (map->death(MarioAntPos_Y + 31, posPlayer.y + 31, posTortuga.y, tortuga_size))
 		{
 			if (tortuga != NULL)
 			{
@@ -167,7 +167,7 @@ void Scene::update(int deltaTime)
 		}
 	}
 
-	if (Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), postortuga, tortuga_size)) {
+	if (Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), posTortuga, tortuga_size)) {
 		if (tortuga != NULL) {
 			if (tortuga->getCrouched()) {
 				tortuga->setChutada(true);
