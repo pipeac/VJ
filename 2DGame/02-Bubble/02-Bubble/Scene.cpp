@@ -64,8 +64,11 @@ void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTor
 
 	Player::instance().init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 
-	for (int i = 0; i < Player::instance().getLifePlayer(); i++)
-		bolet[i].init(texProgram, glm::ivec2((150 + 20 * i), 576));
+	for (int i = 0; i < 10; i++)
+		bolet[i].init(texProgram, glm::ivec2((150 + 20 * i), 0));
+
+	for (int i = 0; i < 48; i++)
+		diners[i].init(texProgram, glm::ivec2((146 + 4 * i), 16));
 
 	if (Gumba_in)
 	{
@@ -93,6 +96,28 @@ void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTor
 
 }
 
+void Scene::updateBolets(int deltaTime)
+{
+	for (int i = 0; i < 10; i++)
+	{
+		if (i < Player::instance().getLifePlayer())
+			bolet[i].update(deltaTime, true);
+		else
+			bolet[i].update(deltaTime, false);
+	}
+}
+
+void Scene::updateDiners(int deltaTime)
+{
+	for (int i = 0; i < 48; i++)
+	{
+		if (i < Player::instance().getExpPlayer())
+			diners[i].update(deltaTime, true);
+		else
+			diners[i].update(deltaTime, false);
+	}
+}
+
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
@@ -118,6 +143,11 @@ void Scene::update(int deltaTime)
 
 	int height = Player::instance().getCrouchPlayer();
 
+	//actualitza el número de bolets que surten per pantalla
+	updateBolets(deltaTime);
+
+	//actualitza el número de diners que surten per pantalla
+	updateDiners(deltaTime);
 
 	//colision con el gumba
 	if (!Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), posGumba, gumba_size))
@@ -126,6 +156,8 @@ void Scene::update(int deltaTime)
 		{
 			if (Gumba_in)
 			{
+				//Per saltar sobre del Gumba guanya 4xp.
+				Player::instance().setExpPlayer(4);
 				gumba->death();
 				gumba_size.y = 0;
 			}
@@ -143,12 +175,14 @@ void Scene::update(int deltaTime)
 	}
 
 	//colision con la tortuga
-	if (!Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), postortuga, tortuga_size))
+	if (!Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), posTortuga, tortuga_size))
 	{
-		if (map->death(MarioAntPos_Y + 31, posPlayer.y + 31, postortuga.y, tortuga_size))
+		if (map->death(MarioAntPos_Y + 31, posPlayer.y + 31, posTortuga.y, tortuga_size))
 		{
 			if (tortuga != NULL)
 			{
+				//Per saltar sobre de la Tortuga guanya 4xp.
+				Player::instance().setExpPlayer(4);
 				tortuga->death();
 				Player::instance().set_Jumping(true);
 				tortuga_size.y = 16;
@@ -167,16 +201,13 @@ void Scene::update(int deltaTime)
 		}
 	}
 
-	if (Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), postortuga, tortuga_size)) {
+	if (Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), posTortuga, tortuga_size)) {
 		if (tortuga != NULL) {
 			if (tortuga->getCrouched()) {
 				tortuga->setChutada(true);
 			}
 		}
 	}
-
-	
-
 
 	if (Mario_chocado)
 	{
@@ -193,12 +224,6 @@ void Scene::update(int deltaTime)
 		}
 		auxchocar += deltaTime;
 	}
-
-
-	//Finalmente, actualizamos
-
-
-
 }
 
 void Scene::render()
@@ -225,11 +250,16 @@ void Scene::render()
 		}
 	}
 
-	for (int i = 0; i < Player::instance().getLifePlayer(); i++)
+	//render dels Bolets que representen la vida a la pantalla
+	for (int i = 0; i < 10; i++)
 		bolet[i].render();
 
-	text.render("Vides: " + to_string(Player::instance().getLifePlayer()), glm::vec2(10, 600), 16, glm::vec4(1, 1, 1, 1));
-	text.render("Experiencia: " + to_string(Player::instance().getExpPlayer()), glm::vec2(10, 620), 16, glm::vec4(1, 1, 1, 1));
+	//render de les monedes que representen la experiencia
+	for (int i = 0; i < 48; i++)
+		diners[i].render();
+
+	text.render("Vides: " + to_string(Player::instance().getLifePlayer()), glm::vec2(10, 22), 16, glm::vec4(1, 1, 1, 1));
+	text.render("Experiencia: " + to_string(Player::instance().getExpPlayer()), glm::vec2(10, 42), 16, glm::vec4(1, 1, 1, 1));
 }
 
 void Scene::initPlayerScene(int posplayerX, int posplayerY)
@@ -237,8 +267,6 @@ void Scene::initPlayerScene(int posplayerX, int posplayerY)
 	Player::instance().setPosition(glm::vec2(posplayerX, posplayerY));
 	Player::instance().setTileMap(map);
 }
-
-
 
 glm::vec2 Scene::getPosPlayer()
 {

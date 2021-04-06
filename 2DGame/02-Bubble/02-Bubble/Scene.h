@@ -31,6 +31,9 @@ public:
 	void render();
 	void initPlayerScene(int posplayerX, int posplayerY);
 
+	void updateBolets(int deltaTime);
+	void updateDiners(int deltaTime);
+
 	glm::vec2 getPosPlayer();
 
 	int playerPosActual();
