@@ -1,5 +1,5 @@
-#ifndef _BOLET_INCLUDE
-#define _BOLET_INCLUDE
+#ifndef _DINERS_INCLUDE
+#define _DINERS_INCLUDE
 
 
 #include "Sprite.h"
@@ -10,13 +10,13 @@
 // all properties it needs to track its movement, jumping, and collisions.
 
 
-class Bolet
+class Diners
 {
 
 public:
 
 	void init(ShaderProgram &shaderProgram, const glm::vec2 &pos);
-	void update(int deltaTime, bool bolet);
+	void update(int deltaTime, bool diners);
 	void render();
 
 private:
@@ -25,6 +25,6 @@ private:
 };
 
 
-#endif // _BOLET_INCLUDE
+#endif // _DINERS_INCLUDE
 
 

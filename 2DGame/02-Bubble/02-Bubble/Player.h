@@ -27,6 +27,7 @@ public:
 
 	bool death();
 	
+	void setExpPlayer(int xp);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void set_Jumping(bool b) {

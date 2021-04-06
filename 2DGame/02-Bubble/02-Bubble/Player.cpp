@@ -248,6 +248,17 @@ bool Player::death()
 	return false;
 }
 
+void Player::setExpPlayer(int xp)
+{
+	exp += xp;
+	if (exp == 48)
+	{
+		exp %= 48;
+		if (life < 10)
+			++life;
+	}
+}
+
 void Player::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;

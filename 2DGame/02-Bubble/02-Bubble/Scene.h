@@ -4,13 +4,15 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "TileMap.h"
 #include "EnemyPath.h"
-#include "Player.h"
-#include "Gumba.h"
+#include "TileMap.h"
 #include "Tortuga.h"
-#include "Text.h"
+#include "Player.h"
+#include "Diners.h"
+#include "Gumba.h"
 #include "Bolet.h"
+#include "Text.h"
+#include "Quad.h"
 
 
 // Scene contains all the entities of our game.
@@ -47,21 +49,24 @@ private:
 	bool Mario_death;
 
 	bool canviescena;
-	TileMap *map;
-	EnemyPath *enemymap;
-	Gumba *gumba;
-	Tortuga *tortuga;
-	ShaderProgram texProgram;
-	Text text;
-	Bolet bolet[10];
-	float currentTime, auxchocar;
-	glm::mat4 projection;
-	glm::ivec2 gumba_size;
-	glm::ivec2 tortuga_size;
-
 	bool Gumba_in, Tortuga_in;
+	float currentTime, auxchocar;
 
+	EnemyPath *enemymap;
+	Tortuga *tortuga;
+	TileMap *map;
+	Gumba *gumba;
+	Quad *quad;
 
+	ShaderProgram simpleProgram, texProgram;
+	Bolet bolet[10];
+	Diners diners[100];
+	Text text;
+
+	glm::ivec2 tortuga_size;
+	glm::ivec2 gumba_size;
+
+	glm::mat4 projection;
 };
 
 

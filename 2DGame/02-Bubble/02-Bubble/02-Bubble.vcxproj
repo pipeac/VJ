@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Bolet.h" />
+    <ClInclude Include="Diners.h" />
     <ClInclude Include="EnemyPath.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gumba.h" />
@@ -30,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bolet.cpp" />
+    <ClCompile Include="Diners.cpp" />
     <ClCompile Include="EnemyPath.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gumba.cpp" />
