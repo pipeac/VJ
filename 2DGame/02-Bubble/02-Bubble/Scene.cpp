@@ -256,7 +256,12 @@ void Scene::render()
 
 	//render de les monedes que representen la experiencia
 	for (int i = 0; i < 48; i++)
-		diners[i].render();
+	{
+		if (i < Player::instance().getExpPlayer())
+			diners[i].render();
+		else if ( (i+2)%4 == 0)
+			diners[i].render();
+	}
 
 	text.render("Vides: " + to_string(Player::instance().getLifePlayer()), glm::vec2(10, 22), 16, glm::vec4(1, 1, 1, 1));
 	text.render("Experiencia: " + to_string(Player::instance().getExpPlayer()), glm::vec2(10, 42), 16, glm::vec4(1, 1, 1, 1));
