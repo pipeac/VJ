@@ -26,7 +26,7 @@ public:
 	Scene();
 	~Scene();
 
-	void init(string loadmap, string loadenemypath, bool Tortuga_in, bool Gumba_in);
+	void init(string loadmap, string loadenemypath, bool Gumba_in, bool Tortuga_in, glm::vec2 posGumba, glm::vec2 posTortuga);
 	void update(int deltaTime);
 	void render();
 	void initPlayerScene(int posplayerX, int posplayerY);
@@ -34,7 +34,7 @@ public:
 	void updateBolets(int deltaTime);
 	void updateDiners(int deltaTime);
 
-	glm::vec2 getPosPlayer();
+	glm::ivec2 getPosPlayer();
 
 	int playerPosActual();
 
@@ -42,7 +42,7 @@ private:
 	void initShaders();
 
 private:
-	int Mario_tmp_inmune, Gumba_tmp_moribundo;
+	int Mario_tmp_inmune, gumba_tmp_moribundo;
 	
 	//Indicador sobre el Mario se encuentra en estado chocado, lo que implica que no sufre daño adicional
 	bool Mario_chocado;
@@ -61,7 +61,7 @@ private:
 	Gumba *gumba;
 	Quad *quad;
 
-	ShaderProgram simpleProgram, texProgram;
+	ShaderProgram texProgram;
 	Bolet bolet[10];
 	Diners diners[100];
 	Text text;

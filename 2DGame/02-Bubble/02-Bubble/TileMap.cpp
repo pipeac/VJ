@@ -204,13 +204,32 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
+bool TileMap::MoveDownPipe(const glm::ivec2 &pos, const glm::ivec2 &size, int *posX) const
+{
+	int x0, x1, y;
+
+	x0 = (pos.x + 4) / tileSize;
+	x1 = (pos.x + size.x - 5) / tileSize;
+	y = (pos.y + size.y + 16) / tileSize;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y*mapSize.x + x] != 4 && map[y*mapSize.x + x] != 5 && 
+			map[y*mapSize.x + x] != 7 && map[y*mapSize.x + x] != 8)
+		{
+			return true;
+		}
+	}
+	//*posX = tileSize * x1 - size.x + tileSize / 2;
+	return false;
+}
+
 bool TileMap::collisionWater(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
 {
 	int x, y;
 
 	x = (pos.x + size.x / 2) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
-	if (map[y*mapSize.x + x] == 6)
+	if (map[y*mapSize.x + x] == 9)
 		return true;
 
 	return false;

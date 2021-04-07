@@ -2,7 +2,10 @@
 #define _GAME_INCLUDE
 
 
+#include "Instruccions.h"
+#include "Credits.h"
 #include "Scene.h"
+#include "Menu.h"
 
 
 #define SCREEN_WIDTH 640
@@ -30,6 +33,14 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
+
+	void changeMenu(int actual);
+	void changeInstruccions();
+	void changeCredits();
+	void changeSceneActual(int actual);
+	int getSceneActual() { return sceneActual; }
+
+	void posPlayerScene(int posplayerX, int posplayerY);
 	
 	// Input callback methods
 	void keyPressed(int key);
@@ -37,16 +48,22 @@ public:
 	void specialKeyPressed(int key);
 	void specialKeyReleased(int key);
 	void mouseMove(int x, int y);
-	void mousePress(int button);
+	void mousePress(int button, int x, int y);
 	void mouseRelease(int button);
 	
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
+	bool getMouse() const;
+	glm::ivec2 getMousePosition() const;
 
 private:
-	bool bPlay;                       // Continue to play game?
-	Scene scene[3];                      // Scene to render
-	bool keys[256], specialKeys[256]; // Store key states so that we can have access at any time
+
+	//Per tal de visualitzar el menu, les instruccions i els credits
+	bool menu, instruccions, credits;
+	bool bPlay, mouse;
+	Scene scene[3];
+	bool keys[256], specialKeys[256];
+	glm::ivec2 mousePosition;
 
 	int sceneActual;
 };

@@ -13,11 +13,15 @@
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Bolet.h" />
+    <ClInclude Include="Credits.h" />
     <ClInclude Include="Diners.h" />
     <ClInclude Include="EnemyPath.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gumba.h" />
+    <ClInclude Include="Instruccions.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Powerups.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
@@ -31,12 +35,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bolet.cpp" />
+    <ClCompile Include="Credits.cpp" />
     <ClCompile Include="Diners.cpp" />
     <ClCompile Include="EnemyPath.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gumba.cpp" />
+    <ClCompile Include="Instruccions.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Powerups.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -90,13 +98,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\libs\Simple OpenGL Image Library\src;C:\Users\marc0\Desktop\VJ\libs\freetype-2.3.5-1-bin\include\freetype2;C:\Users\marc0\Desktop\VJ\libs\freetype-2.3.5-1-bin\include;..\..\..\libs\freeglut\include;..\..\..\libs\glew-1.13.0\include;..\..\..\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\libs\Simple OpenGL Image Library\src;..\libs\freetype-2.3.5-1-bin\include\freetype2;..\libs\freetype-2.3.5-1-bin\include;..\libs\freeglut\include;..\libs\glew-1.13.0\include;..\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\marc0\Desktop\VJ\libs\freetype-2.3.5-1-bin\lib;..\..\..\libs\Simple OpenGL Image Library\projects\VC9\Debug;..\..\..\libs\freeglut\lib;..\..\..\libs\glew-1.13.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\libs\freetype-2.3.5-1-bin\lib;..\libs\Simple OpenGL Image Library\projects\VC9\Debug;..\libs\freeglut\lib;..\libs\glew-1.13.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>freetype.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

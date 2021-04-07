@@ -1,6 +1,7 @@
 #ifndef _PLAYER_INCLUDE
 #define _PLAYER_INCLUDE
 
+#include <map>
 
 #include "Sprite.h"
 #include "TileMap.h"
@@ -27,6 +28,7 @@ public:
 
 	bool death();
 	
+	void changePowerUp(string powerup);
 	void setExpPlayer(int xp);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
@@ -43,9 +45,12 @@ public:
 	int getExpPlayer() const { return exp;  }
 	
 private:
-	bool bJumping, vine, auxJump;
+	bool bJumping, vine, auxJump, MarioPipe, canviEscenaPipe;
 	glm::ivec2 tileMapDispl, posPlayer, auxPosPlayer;
 	int jumpAngle, startY, life, size_crouched, exp;
+	std::map<std::string, bool> powerups;
+	float timeCanviEscenaPipe;
+
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;

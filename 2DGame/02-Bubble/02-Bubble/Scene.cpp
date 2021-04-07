@@ -42,7 +42,7 @@ Scene::~Scene()
 }
 
 
-void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTortuga_in)
+void Scene::init(string loadmap, string loadenemypath, bool bgumba_in, bool bTortuga_in, glm::vec2 posG, glm::vec2 posT)
 {
 	initShaders();
 
@@ -50,13 +50,11 @@ void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTor
 	Mario_chocado = false;
 	Mario_death = false;
 	Mario_visible = true;
-	Gumba_in = bGumba_in;
-	Tortuga_in = bTortuga_in;
-	Gumba_tmp_moribundo = 0;
 	Mario_tmp_inmune = 0;
+	Gumba_in = bgumba_in;
+	gumba_tmp_moribundo = 0;
 
-	//variables a reusar de los enemigos
-	
+	Tortuga_in = bTortuga_in;
 	tortuga_size = glm::ivec2(16, 24);
 
 	map = TileMap::createTileMap(loadmap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -68,23 +66,22 @@ void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTor
 		bolet[i].init(texProgram, glm::ivec2((150 + 20 * i), 0));
 
 	for (int i = 0; i < 48; i++)
-		diners[i].init(texProgram, glm::ivec2((146 + 4 * i), 16));
+		diners[i].init(texProgram, glm::ivec2((146 + 4 * i), 20));
 
 	if (Gumba_in)
 	{
 		gumba = new Gumba();
 		gumba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		gumba->setPosition(glm::vec2(INIT_ENEMY_X_TILES * enemymap->getTileSize(), INIT_ENEMY_Y_TILES * enemymap->getTileSize()));
+		gumba->setPosition(glm::vec2(posG));
 		gumba->setEnemyMap(enemymap);
 		gumba_size = gumba->getSize();
 	}
-	
-	
+		
 	if (Tortuga_in) 
-	{
+		{
 		tortuga = new Tortuga();
 		tortuga->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		tortuga->setPosition(glm::vec2(INIT_TORTUGA_X_TILES * enemymap->getTileSize(), INIT_TORTUGA_Y_TILES * enemymap->getTileSize()));
+		tortuga->setPosition(posT);
 		tortuga->setEnemyMap(enemymap);
 	}
 
@@ -124,15 +121,14 @@ void Scene::update(int deltaTime)
 
 	int MarioAntPos_Y = Player::instance().getPosPlayer().y;
 	
-	//actualizacion del Gumba
 	glm::ivec2 posGumba;
+	glm::ivec2 posTortuga;
+	//actualizacion del gumba
 	if (Gumba_in) {
 		gumba->update(deltaTime);
 		posGumba = gumba->getPos();
 	}
-
 	//actualizacion de la Tortuga
-	glm::ivec2 posTortuga;
 	if (Tortuga_in) {
 		tortuga->update(deltaTime);
 		posTortuga = tortuga->getPos();
@@ -156,9 +152,10 @@ void Scene::update(int deltaTime)
 		{
 			if (Gumba_in)
 			{
-				//Per saltar sobre del Gumba guanya 4xp.
+				//Per saltar sobre del gumba guanya 4xp.
 				Player::instance().setExpPlayer(4);
 				gumba->death();
+				Player::instance().set_Jumping(true);
 				gumba_size.y = 0;
 			}
 		}
@@ -173,7 +170,6 @@ void Scene::update(int deltaTime)
 			}
 		}
 	}
-
 	//colision con la tortuga
 	if (!Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), posTortuga, tortuga_size))
 	{
@@ -186,7 +182,6 @@ void Scene::update(int deltaTime)
 				tortuga->death();
 				Player::instance().set_Jumping(true);
 				tortuga_size.y = 16;
-				
 			}
 		}
 		else if (!Mario_death)
@@ -200,7 +195,6 @@ void Scene::update(int deltaTime)
 			}
 		}
 	}
-
 	if (Mario_chocado && map->pain(posPlayer, glm::ivec2(16, 32), posTortuga, tortuga_size)) {
 		if (tortuga != NULL) {
 			if (tortuga->getCrouched()) {
@@ -237,16 +231,19 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	if (Tortuga_in) tortuga->render();
+
 	if (Mario_visible)
 		Player::instance().render();
-	if (Gumba_in) {
-		if (Gumba_tmp_moribundo != 30)
+
+	if (Tortuga_in) 
+		tortuga->render();
+	if (Gumba_in) 
+	{
+		if (gumba_tmp_moribundo != 30)
 		{
 			gumba->render();
-			if (gumba_size.y == 0) {
-				Gumba_tmp_moribundo++;
-			}
+			if (gumba_size.y == 0) 
+				gumba_tmp_moribundo++;
 		}
 	}
 
@@ -273,7 +270,7 @@ void Scene::initPlayerScene(int posplayerX, int posplayerY)
 	Player::instance().setTileMap(map);
 }
 
-glm::vec2 Scene::getPosPlayer()
+glm::ivec2 Scene::getPosPlayer()
 {
 	return Player::instance().getPosPlayer();
 }
