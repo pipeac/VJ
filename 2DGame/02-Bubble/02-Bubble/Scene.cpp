@@ -56,7 +56,6 @@ void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTor
 	Mario_tmp_inmune = 0;
 
 	//variables a reusar de los enemigos
-	
 	tortuga_size = glm::ivec2(16, 24);
 
 	map = TileMap::createTileMap(loadmap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -64,11 +63,11 @@ void Scene::init(string loadmap, string loadenemypath, bool bGumba_in, bool bTor
 
 	Player::instance().init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 
-	for (int i = 0; i < 10; i++)
-		bolet[i].init(texProgram, glm::ivec2((150 + 20 * i), 0));
-
-	for (int i = 0; i < 48; i++)
+	for (int i = 0; i < 48; i++) {
+		if (i < 10) bolet[i].init(texProgram, glm::ivec2((150 + 20 * i), 0));
 		diners[i].init(texProgram, glm::ivec2((146 + 4 * i), 16));
+	}
+
 
 	if (Gumba_in)
 	{
