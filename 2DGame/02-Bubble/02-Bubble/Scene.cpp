@@ -54,7 +54,9 @@ void Scene::init(string loadmap, string loadenemypath, bool bgumba_in, bool bTor
 	Gumba_in = bgumba_in;
 	gumba_tmp_moribundo = 0;
 
+
 	Tortuga_in = bTortuga_in;
+	//variables a reusar de los enemigos
 	tortuga_size = glm::ivec2(16, 24);
 
 	map = TileMap::createTileMap(loadmap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -67,6 +69,12 @@ void Scene::init(string loadmap, string loadenemypath, bool bgumba_in, bool bTor
 
 	for (int i = 0; i < 48; i++)
 		diners[i].init(texProgram, glm::ivec2((146 + 4 * i), 20));
+
+	for (int i = 0; i < 48; i++) {
+		if (i < 10) bolet[i].init(texProgram, glm::ivec2((150 + 20 * i), 0));
+		diners[i].init(texProgram, glm::ivec2((146 + 4 * i), 16));
+	}
+
 
 	if (Gumba_in)
 	{
